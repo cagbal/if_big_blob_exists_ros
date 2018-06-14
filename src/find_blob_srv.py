@@ -131,13 +131,13 @@ def check(req):
     global ic
     global pc
 
-    print pc.min_distance
-    print pc.max_distance
-
-
-    is_person, blob_area = find_blob(ic.Image, req.blob_threshold, pc.min_distance, pc.max_distance)
-
     response = CheckResponse()
+
+    try:
+        is_person, blob_area = find_blob(ic.Image, req.blob_threshold, pc.min_distance, pc.max_distance)
+    except:
+        is_person = False
+        blob_area = 0
 
     response.if_person_exists = is_person
 
