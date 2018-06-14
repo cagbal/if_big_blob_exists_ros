@@ -1,0 +1,11 @@
+# Set a threshold for a big blob to accept it as a person
+int32 blob_threshold
+---
+# Area of biggest blob closest to camera in depth image
+int32 blob_area
+
+# True if a big blob or big face is found
+bool if_person_exists
+
+# in case of face detection: area of face bounding box
+int32 bounding_box_area
