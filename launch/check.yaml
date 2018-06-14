@@ -1,0 +1,7 @@
+# Set depth image topic here
+depth_topic: "/camera/depth_registered/hw_registered/image_rect"
+
+# Set your min distance and max distance for blob
+max_distance: 1200
+
+min_distance: 600

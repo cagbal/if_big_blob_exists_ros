@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<launch>
+  <node name="person_blob_ros_node" pkg="person_blob_ros" type="find_blob_srv.py" output="screen">
+    <rosparam command="load" file="$(find person_blob_ros)/launch/cheasfasck.yaml"/>
+  </node>
+</launch>

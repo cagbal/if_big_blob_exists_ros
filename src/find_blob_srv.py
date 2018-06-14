@@ -26,10 +26,27 @@ class ImageContainer(object):
 
     def setImage(self, image_msgs):
         self.Image = self._bridge.imgmsg_to_cv2(image_msgs, "passthrough")
+
+class ParameterContainer(object):
+    """docstring for ParameterContainer."""
+    def __init__(self):
+        super(ParameterContainer, self).__init__()
+        self.min_distance = None
+        self.max_distance = None
+        self.depth_topic = None
+
+        self.get_parameters_from_file()
+
+    def get_parameters_from_file(self):
+        self.min_distance = rospy.get_param("/person_blob_ros/min_distance")
+        self.max_distance = rospy.get_param("/person_blob_ros/max_distance")
+        self.depth_topic = rospy.get_param("/person_blob_ros/depth_topic")
+
 ################################################################################
 
 # To make it fast I set some global variables sorry :/
 ic = ImageContainer()
+pc = ParameterContainer()
 
 def check_if_person_exists(im, contours, area_threshold=50000):
     """
@@ -112,10 +129,13 @@ def check(req):
     """
 
     global ic
+    global pc
 
-    print req
+    print pc.min_distance
+    print pc.max_distance
 
-    is_person, blob_area = find_blob(ic.Image, req.blob_threshold)
+
+    is_person, blob_area = find_blob(ic.Image, req.blob_threshold, pc.min_distance, pc.max_distance)
 
     response = CheckResponse()
 
@@ -126,13 +146,13 @@ def check(req):
     return response
 
 def main():
+    global pc
     # Create the node
     rospy.init_node('check_if_person_exitsts_srv')
     # Subscribe to depth image
-    rospy.Subscriber("/camera/depth_registered/hw_registered/image_rect", Image, callback)
+    rospy.Subscriber(pc.depth_topic, Image, callback)
     # Create the server
     s = rospy.Service('check_if_person_exists', Check, check)
-
 
     rospy.spin()
 
